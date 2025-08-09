@@ -21,11 +21,20 @@ npm run dev
 No server secrets are required. The API key is stored in the browser only and sent with each request from the client to the Next.js API route which immediately forwards upstream. For production, ensure your Vercel project allows edge/body streaming.
 
 ## Deploy to Vercel
-1. Push this repo to GitHub/GitLab
-2. Import to Vercel → framework: Next.js
-3. Build command: `next build`, Output: default
-4. No environment vars required
 
-## Notes
-- Supports any OpenAI-compatible endpoint (OpenAI, Together, Groq-compatible if they expose chat/completions, local server or Ollama). For Ollama, set baseUrl to `http://localhost:11434` and model like `llama3:8b`. Some providers use `/v1/chat/completions`, others `/v1/chat/completions` as well; this project assumes the OpenAI chat endpoint.
-- If your provider needs a different path or headers, adjust `src/app/api/chat/route.ts`.
+One-click deploy:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FTrent-Fellbootman%2Ftmp-repo&project-name=llm-chat-webui&repository-name=llm-chat-webui)
+
+Manual steps:
+1. Import the GitHub repo into Vercel → Framework: Next.js
+2. Build command: `next build` (default), Output: `.next` (default)
+3. No env vars required
+4. Deploy and open the URL. First, create a Config on the left: baseUrl, apiKey, model
+
+## Provider notes
+- OpenAI: baseUrl `https://api.openai.com`, model `gpt-4o-mini` (or others)
+- Ollama: baseUrl `http://localhost:11434`, model `llama3:8b`
+- Other OpenAI-compatible providers should work if they implement `/v1/chat/completions` and Bearer auth
+
+If a provider needs a different path or headers, adjust `src/app/api/chat/route.ts` accordingly.
