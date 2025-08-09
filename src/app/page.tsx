@@ -7,6 +7,8 @@ import { nanoid } from "nanoid";
 import { streamChat } from "@/lib/client";
 import { Plus, Settings, Send, Trash2, Edit, Save, RefreshCcw } from "lucide-react";
 import clsx from "classnames";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function useAutoScroll(dep: any) {
   const ref = useRef<HTMLDivElement>(null);
@@ -150,7 +152,7 @@ export default function Page() {
           {activeSession?.messages.map(m => (
             <div key={m.id} className={clsx("bubble", m.role)}>
               <div className="role">{m.role}</div>
-              <div className="content whitespace-pre-wrap">{m.content}</div>
+              <div className="content whitespace-pre-wrap"><Markdown remarkPlugins={[remarkGfm]}>{m.content}</Markdown></div>
             </div>
           ))}
           {!activeSession && <div className="text-center text-gray-400 mt-20">Create a chat to start</div>}
