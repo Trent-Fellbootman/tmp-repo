@@ -73,6 +73,14 @@ export default function Page() {
   const onSend = async () => {
     if (!activeConfig) { setError("Please create a model config first"); return; }
     const sid = activeSession?.id || createSession(activeConfig.id, input.slice(0, 30) || "New Chat");
+
+    const history = [...(activeSession?.messages || [])];
+    // include optional system prompt
+    const sys = (sessions.find(s=>s.id===sid)?.systemPrompt || '').trim();
+    if (sys) {
+      history.unshift({ id: 'sys', role: 'system', content: sys, createdAt: Date.now() } as ChatMessage);
+    }
+
     const userMsg: ChatMessage = { id: nanoid(), role: 'user', content: input, createdAt: Date.now() };
     addMessage(sid, userMsg);
     setInput("");
@@ -81,7 +89,7 @@ export default function Page() {
     addMessage(sid, assistantMsg);
     setLoading(true); setError(null);
     try {
-      await streamChat(activeConfig, [...(activeSession?.messages || []), userMsg], (delta) => {
+      await streamChat(activeConfig, [...history, userMsg], (delta) => {
         // append to the last assistant message instead of pushing new messages
         useStore.getState().updateMessage(sid, assistantMsg.id, ({ content }) => ({ content: (content || '') + delta })) as any;
       });
@@ -146,6 +154,14 @@ export default function Page() {
             <div className="font-medium">{activeSession?.title || 'No chat selected'}</div>
             {activeConfig && (<div className="text-xs text-gray-500">Using: {activeConfig.name} · {activeConfig.model}</div>)}
           </div>
+          {activeSession && (
+            <input
+              className="input max-w-xl"
+              placeholder="System prompt (optional)"
+              defaultValue={activeSession.systemPrompt || ''}
+              onBlur={(e)=> useStore.setState(s=>({ sessions: s.sessions.map(ss=> ss.id===activeSession.id ? { ...ss, systemPrompt: e.target.value } : ss) }))}
+            />
+          )}
         </header>
 
         <div className="flex-1 overflow-auto p-4 space-y-3 bg-gray-50" ref={messagesEndRef}>

@@ -15,15 +15,19 @@ interface StoreState {
   updateConfig: (id: string, patch: Partial<ModelConfig>) => void;
   deleteConfig: (id: string) => void;
 
-  createSession: (configId: string, title?: string) => string;
+  createSession: (configId: string, title?: string, systemPrompt?: string) => string;
   deleteSession: (id: string) => void;
   addMessage: (sessionId: string, msg: Omit<ChatMessage, 'id' | 'createdAt'>) => ChatMessage;
   updateMessage: (sessionId: string, messageId: string, patch: Partial<ChatMessage> | ((m: ChatMessage) => Partial<ChatMessage>)) => void;
   setActiveSession: (id: string | null) => void;
   setActiveConfig: (id: string | null) => void;
   renameSession: (id: string, title: string) => void;
+  updateSession: (id: string, patch: Partial<ChatSession>) => void;
 
   resetAll: () => void;
+
+  // optional convenience
+  importState?: (state: Partial<Pick<StoreState, 'sessions' | 'configs' | 'activeSessionId' | 'activeConfigId'>>) => void;
 }
 
 const KEY = 'llm-chat-state-v1';
@@ -52,13 +56,14 @@ export const useStore = create<StoreState>()(
         activeSessionId: s.activeSessionId && s.sessions.find((x) => x.id === s.activeSessionId && x.configId === id) ? null : s.activeSessionId,
       })),
 
-      createSession: (configId, title) => {
+      createSession: (configId, title, systemPrompt) => {
         const id = nanoid();
         const now = Date.now();
         const session: ChatSession = {
           id,
           title: title || 'New Chat',
           configId,
+          systemPrompt,
           messages: [],
           createdAt: now,
           updatedAt: now,
@@ -72,6 +77,10 @@ export const useStore = create<StoreState>()(
       })),
       renameSession: (id, title) => set((s) => ({
         sessions: s.sessions.map((x) => (x.id === id ? { ...x, title } : x)),
+      })),
+      updateSession: (id, patch) => set((s) => ({
+        sessions: s.sessions.map((x) => (x.id === id ? { ...x, ...patch } : x)),
+        updatedAt: Date.now(),
       })),
 
       addMessage: (sessionId, msg) => {
@@ -104,6 +113,12 @@ export const useStore = create<StoreState>()(
       setActiveConfig: (id) => set({ activeConfigId: id }),
 
       resetAll: () => set({ sessions: [], configs: [], activeSessionId: null, activeConfigId: null }),
+      importState: (state) => set((s) => ({
+        sessions: state.sessions ?? s.sessions,
+        configs: state.configs ?? s.configs,
+        activeSessionId: state.activeSessionId ?? s.activeSessionId,
+        activeConfigId: state.activeConfigId ?? s.activeConfigId,
+      })),
     }),
     {
       name: KEY,

@@ -24,6 +24,7 @@ export interface ChatSession {
   title: string;
   messages: ChatMessage[];
   configId: string;
+  systemPrompt?: string;
   createdAt: number;
   updatedAt: number;
 }
