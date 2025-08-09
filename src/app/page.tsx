@@ -66,11 +66,14 @@ export default function Page() {
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const messagesEndRef = useAutoScroll(activeSession?.messages);
 
   const onSend = async () => {
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
     if (!activeConfig) { setError("Please create a model config first"); return; }
     const sid = activeSession?.id || createSession(activeConfig.id, input.slice(0, 30) || "New Chat");
 
@@ -92,7 +95,7 @@ export default function Page() {
       await streamChat(activeConfig, [...history, userMsg], (delta) => {
         // append to the last assistant message instead of pushing new messages
         useStore.getState().updateMessage(sid, assistantMsg.id, ({ content }) => ({ content: (content || '') + delta })) as any;
-      });
+      }, { signal: abortRef.current?.signal });
     } catch (e:any) {
       setError(e.message || String(e));
     } finally {
@@ -177,7 +180,11 @@ export default function Page() {
 
         <div className="border-t p-3 flex items-center gap-2">
           <input className="input flex-1" placeholder="Type your message..." value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); onSend(); }}}/>
-          <button className="btn" disabled={!input || !activeConfig || loading} onClick={onSend}><Send size={16}/> Send</button>
+          {loading ? (
+            <button className="btn" onClick={()=>{ abortRef.current?.abort(); setLoading(false); }}>Cancel</button>
+          ) : (
+            <button className="btn" disabled={!input || !activeConfig} onClick={onSend}><Send size={16}/> Send</button>
+          )}
         </div>
       </main>
 

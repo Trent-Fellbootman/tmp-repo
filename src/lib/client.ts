@@ -3,7 +3,8 @@ import type { ChatMessage, ModelConfig } from "@/types";
 export async function streamChat(
   config: ModelConfig,
   messages: ChatMessage[],
-  onToken: (chunk: string) => void
+  onToken: (chunk: string) => void,
+  opts?: { signal?: AbortSignal }
 ): Promise<string> {
   // Build OpenAI-compatible payload by default
   const payload = {
@@ -23,6 +24,7 @@ export async function streamChat(
     method: 'POST',
     headers,
     body: JSON.stringify({ config, messages }),
+    signal: opts?.signal,
   });
   if (!res.ok || !res.body) {
     const text = await res.text().catch(() => '');
