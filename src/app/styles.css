@@ -12,6 +12,15 @@ body {
     linear-gradient(180deg, rgba(245,247,250,1) 0%, rgba(255,255,255,1) 60%);
 }
 
+/* typography */
+body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; }
+
+/* nav/header polish */
+header { backdrop-filter: blur(6px); background: rgba(255,255,255,0.6); }
+
+/* chat area */
+.content :where(p, ul, ol, pre, code) { font-size: 0.95rem; }
+
 /* components */
 .btn { padding: 0.45rem 0.65rem; font-size: 0.875rem; border: 1px solid #e5e7eb; border-radius: 0.6rem; background: linear-gradient(180deg,#fff,#fafafa); display: inline-flex; align-items: center; gap: 0.375rem; transition: all .2s ease; box-shadow: 0 1px 2px rgba(16,24,40,.06); }
 .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(16,24,40,.12); }

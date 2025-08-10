@@ -69,7 +69,7 @@ export default function Page() {
   const abortRef = useRef<AbortController | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const messagesEndRef = useAutoScroll(activeSession?.messages);
+  const messagesEndRef = useAutoScroll(activeSession?.messages ?? []);
 
 
   const onSend = async () => {
