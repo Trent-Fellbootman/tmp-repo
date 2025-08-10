@@ -79,8 +79,9 @@ export const useStore = create<StoreState>()(
         sessions: s.sessions.map((x) => (x.id === id ? { ...x, title } : x)),
       })),
       updateSession: (id, patch) => set((s) => ({
-        sessions: s.sessions.map((x) => (x.id === id ? { ...x, ...patch } : x)),
-        updatedAt: Date.now(),
+        sessions: s.sessions.map((x) => (
+          x.id === id ? { ...x, ...patch, updatedAt: Date.now() } : x
+        )),
       })),
 
       addMessage: (sessionId, msg) => {
