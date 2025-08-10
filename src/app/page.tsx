@@ -71,6 +71,7 @@ export default function Page() {
 
   const messagesEndRef = useAutoScroll(activeSession?.messages);
 
+
   const onSend = async () => {
     abortRef.current?.abort();
     abortRef.current = new AbortController();
@@ -84,17 +85,17 @@ export default function Page() {
       history.unshift({ id: 'sys', role: 'system', content: sys, createdAt: Date.now() } as ChatMessage);
     }
 
-    const userMsg: ChatMessage = { id: nanoid(), role: 'user', content: input, createdAt: Date.now() };
-    addMessage(sid, userMsg);
+    // add user message (store generates id/createdAt)
+    const userMsgStored = addMessage(sid, { role: 'user', content: input });
     setInput("");
 
-    const assistantMsg: ChatMessage = { id: nanoid(), role: 'assistant', content: "", createdAt: Date.now() };
-    addMessage(sid, assistantMsg);
+    // add assistant placeholder and keep the returned id for streaming updates
+    const assistantMsgStored = addMessage(sid, { role: 'assistant', content: "" });
     setLoading(true); setError(null);
     try {
-      await streamChat(activeConfig, [...history, userMsg], (delta) => {
+      await streamChat(activeConfig, [...history, { ...userMsgStored }], (delta) => {
         // append to the last assistant message instead of pushing new messages
-        useStore.getState().updateMessage(sid, assistantMsg.id, ({ content }) => ({ content: (content || '') + delta })) as any;
+        useStore.getState().updateMessage(sid, assistantMsgStored.id, ({ content }) => ({ content: (content || '') + delta })) as any;
       }, { signal: abortRef.current?.signal });
     } catch (e:any) {
       setError(e.message || String(e));
