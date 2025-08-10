@@ -17,7 +17,7 @@ interface StoreState {
 
   createSession: (configId: string, title?: string, systemPrompt?: string) => string;
   deleteSession: (id: string) => void;
-  addMessage: (sessionId: string, msg: Omit<ChatMessage, 'id' | 'createdAt'>) => ChatMessage;
+  addMessage: (sessionId: string, msg: Partial<ChatMessage> & { role: ChatMessage['role']; content: string }) => ChatMessage;
   updateMessage: (sessionId: string, messageId: string, patch: Partial<ChatMessage> | ((m: ChatMessage) => Partial<ChatMessage>)) => void;
   setActiveSession: (id: string | null) => void;
   setActiveConfig: (id: string | null) => void;
