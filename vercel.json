@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci",
+  "outputDirectory": ".next",
+  "env": {
+    "DB_PROVIDER": "sqlite",
+    "DATABASE_URL": "file:./dev.db"
+  }
+}
