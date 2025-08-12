@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 10 15 31; /* #0a0f1f */
+  --primary: 0 229 255;
+  --secondary: 255 0 212;
+  --accent: 0 255 163;
+}
+
+html, body, :root { height: 100% }
+
+body {
+  background-color: rgb(var(--bg) / 1);
+  color: white;
+  font-family: 'Orbitron', 'Share Tech Mono', ui-sans-serif, system-ui;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+.neon-border {
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 10px rgba(0,229,255,0.6), 0 0 20px rgba(255,0,212,0.4);
+}
+
+.card {
+  @apply neon-border rounded-xl p-5 bg-black bg-opacity-[0.4] backdrop-blur;
+}
+
+.btn {
+  @apply px-4 py-2 rounded-md border border-white border-opacity-10 text-white text-opacity-90 hover:text-white hover:bg-cyan-500 hover:bg-opacity-20 transition-colors;
+}
+
+.nav-link {
+  @apply px-3 py-2 rounded-md text-white text-opacity-80 hover:text-white hover:bg-pink-500 hover:bg-opacity-20 transition-colors;
+}
+
+h1,h2,h3,h4 { @apply font-cyber; }

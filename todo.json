@@ -1,0 +1,82 @@
+{
+  "project": "Cyber English (Next.js 14 + TS + Tailwind)",
+  "updatedAt": "2025-08-12T02:50:00Z",
+  "todos": [
+    {
+      "id": "todo-setup-list",
+      "title": "创建开发任务列表，分解复杂工作",
+      "status": "completed",
+      "timestamps": {
+        "created": "2025-08-12T02:30:00Z",
+        "completed": "2025-08-12T02:49:30Z"
+      }
+    },
+    {
+      "id": "todo-mark-in-progress",
+      "title": "开始工作时标记为 in_progress",
+      "status": "completed",
+      "timestamps": {
+        "created": "2025-08-12T02:31:00Z",
+        "in_progress": "2025-08-12T02:31:10Z",
+        "completed": "2025-08-12T02:49:35Z"
+      }
+    },
+    {
+      "id": "test-dev-server",
+      "title": "启动开发服务器测试",
+      "status": "completed",
+      "evidence": {
+        "url": "http://localhost:3023",
+        "log": "Next.js 14.2.5 Ready"
+      },
+      "timestamps": {
+        "completed": "2025-08-12T02:35:00Z"
+      }
+    },
+    {
+      "id": "test-browser",
+      "title": "浏览器功能测试（首页/学习/测验/进度）",
+      "status": "completed",
+      "evidence": {
+        "paths": ["/", "/learn", "/quiz", "/progress"],
+        "actions": ["Speak按钮播放", "Quiz答题", "页面导航"]
+      },
+      "timestamps": {"completed": "2025-08-12T02:42:30Z"}
+    },
+    {
+      "id": "test-screenshots",
+      "title": "截取效果图",
+      "status": "completed",
+      "artifacts": [
+        "/tmp/playwright-mcp-output/2025-08-12T02-40-09.910Z/cyber-english-home.png",
+        "/tmp/playwright-mcp-output/2025-08-12T02-40-31.066Z/cyber-english-learn.png",
+        "/tmp/playwright-mcp-output/2025-08-12T02-42-09.961Z/cyber-english-quiz.png",
+        "/tmp/playwright-mcp-output/2025-08-12T02-41-28.091Z/cyber-english-progress.png"
+      ],
+      "timestamps": {"completed": "2025-08-12T02:43:00Z"}
+    },
+    {
+      "id": "test-send-telegram",
+      "title": "通过Telegram发送截图并询问部署",
+      "status": "completed",
+      "evidence": {
+        "files_sent": 5,
+        "note": "已发送截图与源码包，并询问部署方案"
+      },
+      "timestamps": {"completed": "2025-08-12T02:45:00Z"}
+    },
+    {
+      "id": "todo-mark-completed",
+      "title": "完成时标记为 completed 并交付",
+      "status": "completed",
+      "timestamps": {"completed": "2025-08-12T02:49:50Z"}
+    },
+    {
+      "id": "todo-ensure-tracking",
+      "title": "确保所有任务都得到跟踪和完成（归档与记录）",
+      "status": "completed",
+      "artifacts": ["/workspace/cyber-english/cyber-english/todo.json"],
+      "timestamps": {"completed": "2025-08-12T02:49:55Z"}
+    }
+  ]
+}
